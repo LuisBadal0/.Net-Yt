@@ -28,10 +28,10 @@ namespace TrainingWebApp.Controllers
         }
 
         // GET: Jokes/ShowSearchForm
-        public async Task<IActionResult> ShowSearchForm()
+        public async Task<IActionResult> ShowSearchForm(String SearchPhrase)
         {
             return _context.Joke != null ?
-                        View() :
+                        View("Index",await _context.Joke.Where( j => j.JokeQuestion.Contains(SearchPhrase)).ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Joke'  is null.");
         }
         // GET: Jokes/ShowSearchResults
