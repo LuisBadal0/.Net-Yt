@@ -8,9 +8,10 @@
 
         public string? JokeAnswer { get; set; }
 
+        public string? UserId { get; set; }
+
         public Joke()
         {
-
         }
     }
 }

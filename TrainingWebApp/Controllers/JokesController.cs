@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,6 @@ namespace TrainingWebApp.Controllers
     public class JokesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public JokesController(ApplicationDbContext context)
         {
             _context = context;
@@ -72,10 +73,12 @@ namespace TrainingWebApp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,JokeQuestion,JokeAnswer")] Joke joke)
+        public async Task<IActionResult> Create([Bind("Id,JokeQuestion,JokeAnswer,UserId")] Joke joke)
         {
+            joke.UserId = User.Identity?.Name!;
             if (ModelState.IsValid)
             {
+                
                 _context.Add(joke);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
